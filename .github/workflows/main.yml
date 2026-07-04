@@ -1,0 +1,34 @@
+name: Patch recovery for fastbootd
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Your Model Number'
+        required: true
+           uses: actions/setup-node@v4
+      recovery_link:
+        description: 'Enter the Direct Download Link (.img / .lz4 / .zip / .tar):'
+        required: true   
+              
+jobs:
+  patch-recovery-revived:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+         env: FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+ 
+      - name: Running patch-recovery-revived
+        run: |
+          GOFILE=1 bash patch-recovery.sh "${{ github.event.inputs.recovery_link }}" "${{ github.event.inputs.model }}"
+      
+      - name: Uploading Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "Fastbootd-patched-recovery-${{ github.event.inputs.model }}"
+          path: output/*.tar
