@@ -6,7 +6,7 @@ on:
       model:
         description: 'Your Model Number'
         required: true
-
+           uses: actions/setup-node@v4
       recovery_link:
         description: 'Enter the Direct Download Link (.img / .lz4 / .zip / .tar):'
         required: true   
